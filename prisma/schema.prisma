@@ -7,12 +7,13 @@ datasource db {
 }
 
 model User {
-  id        String   @id @default(uuid())
-  email     String   @unique
+  id        String          @id @default(uuid())
+  email     String          @unique
   name      String?
   avatarUrl String?
   notes     Note[]
   reviews   Review[]
+  comments  ReviewComment[]
 }
 
 model Note {
@@ -21,6 +22,9 @@ model Note {
   description String
   imageUrl    String?
   isPublic    Boolean  @default(true)
+  lat         Float?
+  lng         Float?
+  address     String?
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
   userId      String
@@ -36,12 +40,23 @@ model Tag {
 }
 
 model Review {
-  id        String   @id @default(uuid())
-  rating    Int      @default(0) // 1-5 stars
+  id        String          @id @default(uuid())
+  rating    Int             @default(0) // 1-5 stars
   comment   String?
-  createdAt DateTime @default(now())
+  createdAt DateTime        @default(now())
   userId    String
   noteId    String
+  user      User            @relation(fields: [userId], references: [id])
+  note      Note            @relation(fields: [noteId], references: [id])
+  comments  ReviewComment[]
+}
+
+model ReviewComment {
+  id        String   @id @default(uuid())
+  content   String
+  createdAt DateTime @default(now())
+  userId    String
+  reviewId  String
   user      User     @relation(fields: [userId], references: [id])
-  note      Note     @relation(fields: [noteId], references: [id])
+  review    Review   @relation(fields: [reviewId], references: [id])
 }

@@ -23,9 +23,13 @@ app.get('/api/health', (req, res) => {
 // Import routes
 const notesRouter = require('./routes/notes');
 const reviewsRouter = require('./routes/reviews');
+const commentsRouter = require('./routes/comments');
+const authRouter = require('./routes/auth');
 
 app.use('/api/notes', notesRouter);
 app.use('/api/reviews', reviewsRouter);
+app.use('/api/comments', commentsRouter);
+app.use('/api/auth', authRouter);
 
 const PORT = process.env.PORT || 4000;
 app.listen(PORT, () => {
