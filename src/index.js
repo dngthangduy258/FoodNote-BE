@@ -20,9 +20,12 @@ app.get('/api/health', (req, res) => {
   res.json({ status: 'ok' });
 });
 
-// TODO: import routes (notes, tags, reviews, upload)
-// const notesRouter = require('./routes/notes');
-// app.use('/api/notes', notesRouter);
+// Import routes
+const notesRouter = require('./routes/notes');
+const reviewsRouter = require('./routes/reviews');
+
+app.use('/api/notes', notesRouter);
+app.use('/api/reviews', reviewsRouter);
 
 const PORT = process.env.PORT || 4000;
 app.listen(PORT, () => {
