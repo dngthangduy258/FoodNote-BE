@@ -1,0 +1,47 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+}
+
+model User {
+  id        String   @id @default(uuid())
+  email     String   @unique
+  name      String?
+  avatarUrl String?
+  notes     Note[]
+  reviews   Review[]
+}
+
+model Note {
+  id          String   @id @default(uuid())
+  title       String
+  description String
+  imageUrl    String?
+  isPublic    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  userId      String
+  user        User     @relation(fields: [userId], references: [id])
+  tags        Tag[]    @relation("NoteTags")
+  reviews     Review[]
+}
+
+model Tag {
+  id    String @id @default(uuid())
+  name  String @unique
+  notes Note[] @relation("NoteTags")
+}
+
+model Review {
+  id        String   @id @default(uuid())
+  rating    Int      @default(0) // 1-5 stars
+  comment   String?
+  createdAt DateTime @default(now())
+  userId    String
+  noteId    String
+  user      User     @relation(fields: [userId], references: [id])
+  note      Note     @relation(fields: [noteId], references: [id])
+}
